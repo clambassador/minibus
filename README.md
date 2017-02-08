@@ -13,10 +13,16 @@ io/Key
 
 A wrapper for the return value of getch().
 
+driver/MinibusDriver
+--------------------
 
+A driver that takes a set of widget/state/nextstate triples and handles keyboard
+input and drawing the screen.
 
 Todo
 ----
 
-Plenty. Other widgets. Keyboard IO thread and a control flow object that builds
-the widgets and manages their behaviour.
+Other widgets: scrolling list, grepping list, form with edit fields. System
+monitor, debug log with access keys
+
+Socket interaction for remote client or html front end.
