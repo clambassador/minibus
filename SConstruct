@@ -5,6 +5,7 @@ common = Split("""../ib/libib.a
 	       """)
 tests = dict()
 tests['test_list_select.cc'] = 'test_list_select'
+tests['test_driver.cc'] = 'test_driver'
 
 libs = Split("""pthread
 	        ncurses

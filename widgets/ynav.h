@@ -21,7 +21,7 @@ public:
 		} else if (key.down()) {
 			if (++_ycur == _ymax) --_ycur;
 		}
-		return _ycur;
+		return 0;
 	}
 
 protected:

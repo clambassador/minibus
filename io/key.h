@@ -8,6 +8,20 @@ namespace minibus {
 class Key {
 public:
 	Key(int ch) : _ch(ch) {}
+	Key(const Key& key) : _ch(key._ch) {}
+	bool operator==(const Key& other) const {
+		return tidy(_ch) == tidy(other._ch);
+	}
+
+	static int tidy(int key) {
+		// handle paired keys. currently only one.
+		switch (key) {
+			case KEY_ENTER:
+				return '\n';
+			default:
+				return key;
+		}
+	}
 
 	bool enter() const {
 		return (_ch == '\n' || _ch == KEY_ENTER);

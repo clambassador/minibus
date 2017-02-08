@@ -14,6 +14,7 @@ using namespace minibus;
 vector<string> vs;
 int result(size_t t) {
 	mvprintw(10, 10, vs[t].c_str());
+	return 0;
 }
 
 int main() {

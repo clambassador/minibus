@@ -51,7 +51,8 @@ public:
 	}
 
 	virtual int keypress(const Key& key) {
-		return YNav::keypress(key); }
+		return YNav::keypress(key);
+	}
 
 protected:
 	vector<string> _items;
