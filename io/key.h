@@ -67,6 +67,14 @@ public:
 		return _ch == KEY_SEND;
 	}
 
+	bool del() const {
+		return _ch == KEY_DC;
+	}
+
+	bool backspace() const {
+		return _ch == KEY_BACKSPACE;
+	}
+
 	int key() const {
 		return _ch;
 	}

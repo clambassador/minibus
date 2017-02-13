@@ -37,15 +37,17 @@ int main() {
 	noecho();
 	cbreak();
 
-	ListSelect *ls = new ListSelect(vs, bind(&result, _1));
+	ListSelect *ls = new ListSelect(vs);
 	Text *tx1 = new Text("Hello THERE!!");
-	tx2 = new Text("You're all set!");
+	tx2 = new Text("loading.");
 
 	MinibusDriver md;
-	md.set_state_widget(0, new CloseOnKey(tx1));
-	md.set_state_widget(1, new CloseOnKey(ls));
-	md.set_state_widget(2, new CloseOnKey(tx2),
-			    bind(MinibusDriver::terminate, _1));
+	md.add_state_widget(new CloseOnKey(tx1));
+	md.add_state_widget(new CloseOnKey(ls));
+	md.add_state_widget(new CloseOnKey(tx2));
 
 	md.start();
+	future<int> fpos = ls->get_selected_pos();
+	fpos.wait();
+	result(fpos.get());
 }

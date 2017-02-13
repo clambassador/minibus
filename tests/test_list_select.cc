@@ -1,5 +1,6 @@
 #include <iostream>
 #include <functional>
+#include <future>
 #include <ncurses.h>
 #include <string>
 #include <vector>
@@ -30,15 +31,22 @@ int main() {
 	noecho();
 	cbreak();
 
-	ListSelect ls(vs, bind(&result, _1));
+	ListSelect ls(vs);
+	future<int> fpos = ls.get_selected_pos();
+	future<string> fval = ls.get_selected_value();
 
 	while (true) {
 		ls.render(stdscr);
 		Key key(getch());
 		if (key.enter()) {
 			ls.close();
+			break;
 		} else {
 			ls.keypress(key);
 		}
 	}
+	fpos.wait();
+	fval.wait();
+	cout << "selected: " << fpos.get() << " " << fval.get() << endl;
+
 }

@@ -2,6 +2,7 @@
 #define __MINIBUS__WIDGET__LIST_SELECT__H__
 
 #include <functional>
+#include <future>
 #include <string>
 #include <vector>
 
@@ -17,8 +18,8 @@ typedef function<int(size_t)> SelectCB;
 
 class ListSelect : public YNav, public Widget {
 public:
-	ListSelect(const vector<string>& items, SelectCB cb)
-	    : YNav(items.size()), _items(items), _cb(cb) {}
+	ListSelect(const vector<string>& items)
+	    : YNav(items.size()), _items(items) {}
 
 	virtual int render(WINDOW* win) {
 		init_pair(1, COLOR_GREEN, COLOR_BLACK);
@@ -46,7 +47,8 @@ public:
 	}
 
 	virtual int close() {
-		_cb(_ycur);
+		_selected_pos.set_value(_ycur);
+		_selected_value.set_value(_items.at(_ycur));
 		return 0;
 	}
 
@@ -54,9 +56,18 @@ public:
 		return YNav::keypress(key);
 	}
 
+	virtual future<int> get_selected_pos() {
+		return _selected_pos.get_future();
+	}
+
+	virtual future<string> get_selected_value() {
+		return _selected_value.get_future();
+	}
+
 protected:
 	vector<string> _items;
-	SelectCB _cb;
+	promise<int> _selected_pos;
+	promise<string> _selected_value;
 };
 
 }  // minibus

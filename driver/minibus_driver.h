@@ -27,7 +27,7 @@ public:
 		cbreak();
 	}
 	MinibusDriver(WINDOW* window)
-		: _window(window), _cur_state(0) {}
+		: _window(window), _cur_state(0), _cur_state_build(0) {}
 
 	~MinibusDriver() {
 		_thread->join();
@@ -41,6 +41,19 @@ public:
 
 	virtual void stop() {
 		_stop = true;
+	}
+
+	virtual void add_state_widget(Widget* widget) {
+		if (_cur_state_build) {
+			assert(_state_to_callback.count(_cur_state_build - 1));
+			_state_to_callback[_cur_state_build - 1]
+			    = bind(next, _cur_state_build - 1, _1);
+		}
+		assert(!_state_to_widget.count(_cur_state_build));
+		assert(!_state_to_callback.count(_cur_state_build));
+		_state_to_widget[_cur_state_build].reset(widget);
+		_state_to_callback[_cur_state_build] = bind(terminate, _1);
+		++_cur_state_build;
 	}
 
 	virtual void set_state_widget(int state, Widget* widget) {
@@ -111,6 +124,7 @@ protected:
 	bool _stop;
 	unique_ptr<thread> _thread;
 	int _cur_state;
+	int _cur_state_build;
 	map<int, unique_ptr<Widget>> _state_to_widget;
 	map<int, FNextState> _state_to_callback;
 };
