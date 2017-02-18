@@ -2,13 +2,15 @@
 #define __MINIBUS__WIDGET__WIDGET__H__
 
 #include <ncurses.h>
+
 #include "minibus/io/key.h"
+#include "minibus/io/i_display.h"
 
 namespace minibus {
 
 class Widget {
 public:
-	virtual int render(WINDOW* win) = 0;
+	virtual int render(IDisplay*) = 0;
 	virtual int open() = 0;
 	virtual int close() = 0;
 	virtual int keypress(const Key&) = 0;

@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "minibus/io/i_display.h"
 #include "minibus/io/key.h"
 #include "minibus/widgets/widget.h"
 #include "minibus/widgets/ynav.h"
@@ -14,24 +15,23 @@ using namespace std;
 
 namespace minibus {
 
-typedef function<int(size_t)> SelectCB;
-
 class ListSelect : public YNav, public Widget {
 public:
 	ListSelect(const vector<string>& items)
 	    : YNav(items.size()), _items(items) {}
 
-	virtual int render(WINDOW* win) {
+	virtual int render(IDisplay* win) {
 		init_pair(1, COLOR_GREEN, COLOR_BLACK);
 		init_pair(2, COLOR_BLACK, COLOR_GREEN);
 		for (size_t i = 0; i < _items.size(); ++i) {
+			// TODO : use format string
 			if (_ycur == i) {
 				// todo: use a destructor to attroff
 				attron(COLOR_PAIR(2));
 			} else {
 				attron(COLOR_PAIR(1));
 			}
-			mvwprintw(win, i, 0, _items[i].c_str());
+			win->write(i, 0, _items[i]);
 			if (_ycur == i) {
 				// todo: use a destructor to attroff
 				attroff(COLOR_PAIR(2));

@@ -5,8 +5,13 @@
 #include <functional>
 #include <map>
 #include <memory>
+#include <ncurses.h>
 #include <thread>
 
+#include "minibus/io/getch_input.h"
+#include "minibus/io/i_display.h"
+#include "minibus/io/i_input.h"
+#include "minibus/io/screen_display.h"
 #include "minibus/io/key.h"
 #include "minibus/widgets/widget.h"
 
@@ -19,15 +24,16 @@ typedef function<int(int)> FNextState;
 
 class MinibusDriver {
 public:
-	MinibusDriver() : MinibusDriver(stdscr) {
+	MinibusDriver() : MinibusDriver(new ScreenDisplay(stdscr),
+					new GetchInput()) {
 		initscr();
 		start_color();
 		keypad(stdscr, true);
 		noecho();
 		cbreak();
 	}
-	MinibusDriver(WINDOW* window)
-		: _window(window), _cur_state(0), _cur_state_build(0) {}
+	MinibusDriver(IDisplay* display, IInput* input)
+		: _display(display), _input(input), _cur_state(0), _cur_state_build(0) {}
 
 	~MinibusDriver() {
 		_thread->join();
@@ -81,16 +87,17 @@ public:
 
 protected:
 	virtual void render() {
+		unique_ptr<RenderFinish> rd(_display->start_render());
 		Widget* widget = get_focus();
 		assert(widget);
-		widget->render(_window);
+		widget->render(_display);
 	}
 
 	virtual void keypress(const Key& key) {
 		Widget* widget = get_focus();
 		assert(widget);
 		if (widget->keypress(key)) {
-			clear();
+			_display->clear();
 			update_state(widget->close());
 		}
 	}
@@ -113,14 +120,13 @@ protected:
 		while (!_stop) {
 			render();
 
-			/* TODO: do a preemptable version */
-			Key key(getch());
-
+			Key key(_input->get_key());
 			keypress(key);
 		}
 	}
 
-	WINDOW* _window;
+	IDisplay* _display;
+	IInput* _input;
 	bool _stop;
 	unique_ptr<thread> _thread;
 	int _cur_state;

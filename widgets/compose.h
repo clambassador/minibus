@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "minibus/io/i_display.h"
 #include "minibus/io/key.h"
 #include "minibus/widgets/widget.h"
 
@@ -18,8 +19,8 @@ public:
 		assert(_next.get());
 	}
 
-	virtual int render(WINDOW* win) {
-		return _next->render(win);
+	virtual int render(IDisplay* display) {
+		return _next->render(display);
 	}
 
 	virtual int open() {

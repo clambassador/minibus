@@ -5,7 +5,9 @@
 #include <string>
 #include <vector>
 
+#include "minibus/io/cached_display.h"
 #include "minibus/io/key.h"
+#include "minibus/io/screen_display.h"
 #include "minibus/widgets/list_select.h"
 
 using namespace std;
@@ -36,7 +38,7 @@ int main() {
 	future<string> fval = ls.get_selected_value();
 
 	while (true) {
-		ls.render(stdscr);
+		ls.render(new ScreenDisplay(stdscr));
 		Key key(getch());
 		if (key.enter()) {
 			ls.close();
@@ -48,5 +50,5 @@ int main() {
 	fpos.wait();
 	fval.wait();
 	cout << "selected: " << fpos.get() << " " << fval.get() << endl;
-
+	endwin();
 }

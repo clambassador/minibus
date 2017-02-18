@@ -6,6 +6,7 @@
 #include <vector>
 #include <ncurses.h>
 
+#include "minibus/io/i_display.h"
 #include "minibus/io/key.h"
 #include "minibus/widgets/widget.h"
 
@@ -17,8 +18,8 @@ class Text : public Widget {
 public:
 	Text(const string& text) : _text(text) {}
 
-	virtual int render(WINDOW* win) {
-		mvwprintw(win, 0, 0, _text.c_str());
+	virtual int render(IDisplay* win) {
+		win->write(0, 0, _text);
 		return 0;
 	}
 
