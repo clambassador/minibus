@@ -38,7 +38,7 @@ public:
 	}
 
 protected:
-	virtual void after_keypress(const Key& key) {
+	virtual void after_keypress(const Key& key, int state) {
 		if (pos_ready()) {
 			int pos = _f_pos.get();
 			_tx2->set_text(

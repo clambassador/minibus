@@ -56,6 +56,10 @@ public:
 		return YNav::keypress(key);
 	}
 
+	virtual int get_selected() const {
+		return _ycur;
+	}
+
 	virtual future<int> get_selected_pos() {
 		return _selected_pos.get_future();
 	}

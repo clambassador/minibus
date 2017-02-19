@@ -19,6 +19,8 @@ public:
 		assert(_next.get());
 	}
 
+	virtual ~Compose() {}
+
 	virtual int render(IDisplay* display) {
 		return _next->render(display);
 	}

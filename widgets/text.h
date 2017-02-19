@@ -17,6 +17,7 @@ namespace minibus {
 class Text : public Widget {
 public:
 	Text(const string& text) : _text(text) {}
+	virtual ~Text() {}
 
 	virtual int render(IDisplay* win) {
 		win->write(0, 0, _text);

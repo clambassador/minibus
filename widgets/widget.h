@@ -10,6 +10,7 @@ namespace minibus {
 
 class Widget {
 public:
+	virtual ~Widget() {}
 	virtual int render(IDisplay*) = 0;
 	virtual int open() = 0;
 	virtual int close() = 0;

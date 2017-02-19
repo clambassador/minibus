@@ -7,6 +7,7 @@
 #include <memory>
 #include <ncurses.h>
 #include <thread>
+#include <unistd.h>
 
 #include "minibus/io/getch_input.h"
 #include "minibus/io/i_display.h"
@@ -34,12 +35,13 @@ public:
 		keypad(stdscr, true);
 		noecho();
 		cbreak();
+		cout << "cons" << endl;
 	}
 
 	MinibusDriver(IDisplay* display, IInput* input)
 		: _display(display), _input(input), _cur_state(0), _cur_state_build(0) {}
 
-	~MinibusDriver() {
+	virtual ~MinibusDriver() {
 		stop();
 		_input->terminate();
 		_thread->join();
@@ -49,6 +51,10 @@ public:
 	virtual void start() {
 		_stop = false;
 		_thread.reset(new thread(&MinibusDriver::run, this));
+	}
+
+	virtual void wait() {
+		while (!_stop) sleep(1);
 	}
 
 	virtual void stop() {
@@ -68,6 +74,20 @@ public:
 		++_cur_state_build;
 	}
 
+	virtual void loop_state_widget(Widget* widget) {
+		if (_cur_state_build) {
+			assert(_state_to_callback.count(_cur_state_build - 1));
+			_state_to_callback[_cur_state_build - 1]
+			    = bind(next, _cur_state_build - 1, _1);
+		}
+		assert(!_state_to_widget.count(_cur_state_build));
+		assert(!_state_to_callback.count(_cur_state_build));
+		_state_to_widget[_cur_state_build].reset(widget);
+		_state_to_callback[_cur_state_build]
+		    = bind(loop, _cur_state_build, _1);
+		++_cur_state_build;
+	}
+
 	virtual void set_state_widget(int state, Widget* widget) {
 		_state_to_widget[state].reset(widget);
 		_state_to_callback[state] = bind(next, state, _1);
@@ -81,6 +101,10 @@ public:
 
 	static int next(int state, int parm) {
 		return state + 1;
+	}
+
+	static int loop(int state, int parm) {
+		return state;
 	}
 
 	static int terminate(int parm) {
@@ -102,11 +126,14 @@ protected:
 	virtual void keypress(const Key& key) {
 		Widget* widget = get_focus();
 		assert(widget);
-		if (widget->keypress(key)) {
+		bool closed = widget->keypress(key);
+		after_keypress(key, _cur_state);
+		if (closed) {
 			_display->clear();
+			int old_state = _cur_state;
 			update_state(widget->close());
+			after_close(key, old_state);
 		}
-		after_keypress(key);
 	}
 
 	virtual void update_state(int param) {
@@ -120,6 +147,7 @@ protected:
 	}
 
 	virtual Widget* get_focus() {
+		cout << ": " << _cur_state << endl;
 		return _state_to_widget[_cur_state].get();
 	}
 
@@ -130,10 +158,12 @@ protected:
 			if (key.eot()) break;
 
 			keypress(key);
+			if (finished()) _stop = true;
 		}
 	}
 
-	virtual void after_keypress(const Key& key) {}
+	virtual void after_keypress(const Key&, int) {}
+	virtual void after_close(const Key&, int) {}
 
 	IDisplay* _display;
 	IInput* _input;

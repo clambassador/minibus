@@ -12,6 +12,10 @@ class Key {
 public:
 	Key(int ch) : _ch(ch) {}
 	Key(const Key& key) : _ch(key._ch) {}
+	bool operator<(const Key& other) const {
+		return tidy(_ch) < tidy(other._ch);
+	}
+
 	bool operator==(const Key& other) const {
 		return tidy(_ch) == tidy(other._ch);
 	}
@@ -26,8 +30,6 @@ public:
 
 	static int tidy(int key) {
 		// handle paired keys. currently only one.
-		cout << "enter " << KEY_ENTER << " \\n"
-		    << (int) '\n' << " cur " << key << endl;
 		switch (key) {
 			case KEY_ENTER:
 				return '\n';

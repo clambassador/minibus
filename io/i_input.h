@@ -7,6 +7,7 @@ class Key;
 
 class IInput {
 public:
+	virtual ~IInput() {}
 	virtual Key get_key() = 0;
 	virtual void terminate() = 0;
 };

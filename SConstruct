@@ -8,6 +8,7 @@ tests['test_list_select.cc'] = 'test_list_select'
 tests['test_driver.cc'] = 'test_driver'
 tests['test_cached_display.cc'] = 'test_cached_display'
 tests['test_minibus_web.cc'] = 'test_minibus_web'
+tests['test_multikey.cc'] = 'test_multikey'
 
 libs = Split("""pthread
 	        ncurses
