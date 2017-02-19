@@ -7,9 +7,11 @@ tests = dict()
 tests['test_list_select.cc'] = 'test_list_select'
 tests['test_driver.cc'] = 'test_driver'
 tests['test_cached_display.cc'] = 'test_cached_display'
+tests['test_minibus_web.cc'] = 'test_minibus_web'
 
 libs = Split("""pthread
 	        ncurses
+		microhttpd
 	     """)
 env = Environment(CXX="ccache clang++ -I../.. -I..", CPPFLAGS="-D_FILE_OFFSET_BITS=64 -Wall -g --std=c++11 -pthread", LIBS=libs, CPPPATH="..")
 env['ENV']['TERM'] = 'xterm'

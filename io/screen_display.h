@@ -28,6 +28,10 @@ public:
 	virtual void finish_render() {
 	}
 
+	virtual size_t width() const { return 80; }
+	virtual size_t height() const { return 40; }
+
+
 protected:
 	WINDOW* _window;
 };

@@ -37,7 +37,6 @@ public:
 
 	virtual RenderFinish* start_render() {
 		cout << "START RENDER" << endl;
-//		clear();
 		return new RenderFinish(this);
 	}
 
@@ -48,6 +47,9 @@ public:
 		cout << s << endl;
 	}
 
+	virtual size_t width() const { return _maxx; }
+	virtual size_t height() const { return _maxy; }
+
 protected:
 	CachedDisplay(const CachedDisplay&) : _maxx(0), _maxy(0) { assert(0); }
 
@@ -56,7 +58,7 @@ protected:
 	}
 
 	virtual size_t pos(size_t y, size_t x) {
-		return (y * _maxy) + x;
+		return (y * _maxx) + x;
 	}
 
 	const size_t _maxx;

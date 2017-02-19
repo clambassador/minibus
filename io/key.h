@@ -3,6 +3,9 @@
 
 #include <ncurses.h>
 
+#include <iostream>
+using namespace std;
+
 namespace minibus {
 
 class Key {
@@ -13,10 +16,22 @@ public:
 		return tidy(_ch) == tidy(other._ch);
 	}
 
+	static Key javascript(int key) {
+		if (key == 37) return KEY_LEFT;
+		if (key == 38) return KEY_UP;
+		if (key == 39) return KEY_RIGHT;
+		if (key == 40) return KEY_DOWN;
+		return key;
+	}
+
 	static int tidy(int key) {
 		// handle paired keys. currently only one.
+		cout << "enter " << KEY_ENTER << " \\n"
+		    << (int) '\n' << " cur " << key << endl;
 		switch (key) {
 			case KEY_ENTER:
+				return '\n';
+			case '\r':
 				return '\n';
 			default:
 				return key;
@@ -73,6 +88,10 @@ public:
 
 	bool backspace() const {
 		return _ch == KEY_BACKSPACE;
+	}
+
+	bool eot() const {
+		return _ch == 4;
 	}
 
 	int key() const {

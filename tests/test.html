@@ -1,0 +1,64 @@
+<html>
+
+<head>
+<body>
+<canvas id="pad" width="200" height="200"></canvas>
+<script>
+
+function http_get(url) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.overrideMimeType('text/plain');
+    xmlhttp.open("GET", url, false);
+    xmlhttp.send(null);
+    return xmlhttp.responseText;
+}
+
+function fresh() {
+		return "t=" + new Date().getTime();
+}
+
+document.onkeydown = function(evt) {
+    evt = evt || window.event;
+		ret = http_get('/%%cid%%/set/key?val=' + evt.keyCode + '&' + fresh());
+    console.log("ret: " + ret);
+    if (ret != '') {
+      window.location.pathname = "/?" + fresh();
+    }
+		// TODO: handle shifts and so forth: evt.ctrlKey
+    render();
+}
+
+function render() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+		data = http_get('/%%cid%%/get/screen?' + fresh());
+		width = http_get('/%%cid%%/get/screen_width?' + fresh());
+		height = http_get('/%%cid%%/get/screen_height?' + fresh());
+    console.log('width = ' + width + ' height = ' + height
+                );
+    console.log('data = ' + data);
+
+    for (i = 0; i < height; ++i) {
+      for (j = 0; j < width; ++j) {
+        render_char(i + 1, j + 1, ''+data.charAt((i * width) + j));
+      }
+    }
+}
+
+var canvas = document.getElementById("pad");
+var ctx = canvas.getContext("2d");
+
+canvas.width = .9 * window.innerWidth;
+canvas.height = .9 * window.innerHeight;
+console.log(canvas.width + " " + canvas.height);
+
+function render_char(row, col, val) {
+  ctx.font = "16px monospace";
+  ctx.fillText(val, col * 10, row * 18);
+}
+
+render();
+</script>
+
+
+</body>
+</html>

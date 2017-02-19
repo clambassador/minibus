@@ -20,7 +20,10 @@ using namespace std::placeholders;
 
 namespace minibus {
 
+class MinibusDriver;
+
 typedef function<int(int)> FNextState;
+typedef function<MinibusDriver*(IDisplay*, IInput*)> FMinibusDriverConstructor;
 
 class MinibusDriver {
 public:
@@ -32,10 +35,13 @@ public:
 		noecho();
 		cbreak();
 	}
+
 	MinibusDriver(IDisplay* display, IInput* input)
 		: _display(display), _input(input), _cur_state(0), _cur_state_build(0) {}
 
 	~MinibusDriver() {
+		stop();
+		_input->terminate();
 		_thread->join();
 		endwin();
 	}
@@ -100,6 +106,7 @@ protected:
 			_display->clear();
 			update_state(widget->close());
 		}
+		after_keypress(key);
 	}
 
 	virtual void update_state(int param) {
@@ -119,11 +126,14 @@ protected:
 	virtual void run() {
 		while (!_stop) {
 			render();
-
 			Key key(_input->get_key());
+			if (key.eot()) break;
+
 			keypress(key);
 		}
 	}
+
+	virtual void after_keypress(const Key& key) {}
 
 	IDisplay* _display;
 	IInput* _input;

@@ -20,6 +20,7 @@ public:
 			: Compose(next), _key(key) {}
 
 	virtual int keypress(const Key& key) {
+		cout << "key " << (key == _key) << endl;
 		if (key == _key) return -1;
 		return _next->keypress(key);
 	}

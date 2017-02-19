@@ -12,9 +12,12 @@ class GetchInput : public IInput {
 public:
 	GetchInput() {}
 	~GetchInput() {}
-	/* TODO: make a timeout version */
 	virtual Key get_key() {
 		return Key(getch());
+	}
+
+	virtual void terminate() {
+		/* TODO: make a timeout version */
 	}
 };
 
