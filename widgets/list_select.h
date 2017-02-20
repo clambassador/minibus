@@ -21,23 +21,11 @@ public:
 	    : YNav(items.size()), _items(items) {}
 
 	virtual int render(IDisplay* win) {
-		init_pair(1, COLOR_GREEN, COLOR_BLACK);
-		init_pair(2, COLOR_BLACK, COLOR_GREEN);
 		for (size_t i = 0; i < _items.size(); ++i) {
-			// TODO : use format string
-			if (_ycur == i) {
-				// todo: use a destructor to attroff
-				attron(COLOR_PAIR(2));
-			} else {
-				attron(COLOR_PAIR(1));
-			}
-			win->write(i, 0, _items[i]);
-			if (_ycur == i) {
-				// todo: use a destructor to attroff
-				attroff(COLOR_PAIR(2));
-			} else {
-				attroff(COLOR_PAIR(1));
-			}
+			win->write(i, 0, _items[i],
+				   (_ycur == i) ?
+					IDisplay::BLACK_RED :
+					IDisplay::RED_BLACK);
 		}
 		return 0;
 	}

@@ -8,6 +8,7 @@
 #include "minibus/driver/minibus_driver.h"
 #include "minibus/io/cached_display.h"
 #include "minibus/io/getch_input.h"
+#include "minibus/io/i_display.h"
 #include "minibus/io/key.h"
 #include "minibus/widgets/close_on_key.h"
 #include "minibus/widgets/list_select.h"
