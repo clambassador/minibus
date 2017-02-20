@@ -36,15 +36,12 @@ public:
 	}
 
 	virtual RenderFinish* start_render() {
-		cout << "START RENDER" << endl;
 		return new RenderFinish(this);
 	}
 
 	virtual void finish_render() {
-		cout << "STOP RENDER" << endl;
 		string s;
 		get_data(&s);
-		cout << s << endl;
 	}
 
 	virtual size_t width() const { return _maxx; }

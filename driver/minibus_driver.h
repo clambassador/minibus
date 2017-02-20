@@ -35,7 +35,6 @@ public:
 		keypad(stdscr, true);
 		noecho();
 		cbreak();
-		cout << "cons" << endl;
 	}
 
 	MinibusDriver(IDisplay* display, IInput* input)
@@ -118,6 +117,7 @@ public:
 protected:
 	virtual void render() {
 		unique_ptr<RenderFinish> rd(_display->start_render());
+		clear();
 		Widget* widget = get_focus();
 		assert(widget);
 		widget->render(_display);
@@ -147,7 +147,6 @@ protected:
 	}
 
 	virtual Widget* get_focus() {
-		cout << ": " << _cur_state << endl;
 		return _state_to_widget[_cur_state].get();
 	}
 
