@@ -10,6 +10,7 @@ tests['test_cached_display.cc'] = 'test_cached_display'
 tests['test_minibus_web.cc'] = 'test_minibus_web'
 tests['test_multikey.cc'] = 'test_multikey'
 tests['test_moveable.cc'] = 'test_moveable'
+tests['test_textentry.cc'] = 'test_textentry'
 
 libs = Split("""pthread
 	        ncurses

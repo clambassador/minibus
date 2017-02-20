@@ -20,7 +20,12 @@ public:
 			if (_xcur > 0) --_xcur;
 		} else if (key.right()) {
 			if (++_xcur == _xmax) --_xcur;
+		} else if (key.home()) {
+			_xcur = 0;
+		} else if (key.end()) {
+			_xcur = _xmax;
 		}
+
 		return 0;
 	}
 

@@ -4,6 +4,8 @@
 #include <ncurses.h>
 
 #include <iostream>
+#include <set>
+
 using namespace std;
 
 namespace minibus {
@@ -94,6 +96,23 @@ public:
 
 	bool eot() const {
 		return _ch == 4;
+	}
+
+	bool navigation() const {
+		static set<int> navkeys;
+		if (navkeys.empty()) {
+			navkeys.insert(KEY_LEFT);
+			navkeys.insert(KEY_UP);
+			navkeys.insert(KEY_RIGHT);
+			navkeys.insert(KEY_DOWN);
+			navkeys.insert(KEY_HOME);
+			navkeys.insert(KEY_SHOME);
+			navkeys.insert(KEY_END);
+			navkeys.insert(KEY_SEND);
+			navkeys.insert(KEY_PPAGE);
+			navkeys.insert(KEY_NPAGE);
+		}
+		return (navkeys.count(_ch));
 	}
 
 	int key() const {
