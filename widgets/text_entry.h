@@ -21,6 +21,7 @@ public:
 
 	virtual int render(IDisplay* win) {
 		win->write(0, 0, _prompt + _text.c_str());
+		win->move(0, _prompt.length() + _xcur);
 		return 0;
 	}
 

@@ -17,6 +17,10 @@ public:
 		mvwprintw(_window, y, x, text.c_str());
 	}
 
+	virtual void move(size_t y, size_t x) {
+		wmove(_window, y, x);
+	}
+
 	virtual void clear() {
 		::clear();
 	}

@@ -12,6 +12,7 @@ class RenderFinish;
 class IDisplay {
 public:
 	virtual ~IDisplay() {}
+	virtual void move(size_t y, size_t x) = 0;
 	virtual void write(size_t y, size_t x, const string& text) = 0;
 	virtual RenderFinish* start_render() = 0;
 	virtual void finish_render() = 0;

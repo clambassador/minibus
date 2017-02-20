@@ -27,6 +27,9 @@ public:
 		}
 	}
 
+	virtual void move(size_t y, size_t x) {
+	}
+
 	virtual void get_data(string* value) {
 		value->assign(_screen.get());
 	}
