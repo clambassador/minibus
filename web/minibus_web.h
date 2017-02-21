@@ -84,6 +84,10 @@ public:
 			display->get_data(output);
 			return true;
 		}
+		if (name == "format") {
+			display->get_format(output);
+			return true;
+		}
 		Logger::error("unknown value %", name);
 		*output = "";
 		return false;

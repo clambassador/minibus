@@ -29,6 +29,7 @@ document.onkeydown = function(evt) {
 
 function render() {
 		data = http_get('/%%cid%%/get/screen?' + fresh());
+		format = http_get('/%%cid%%/get/format?' + fresh());
 		width = http_get('/%%cid%%/get/screen_width?' + fresh());
 		height = http_get('/%%cid%%/get/screen_height?' + fresh());
     if (old_height != height || old_width != width) {
@@ -75,6 +76,9 @@ var old_width = 0;
 
 var col_width = 10;
 var row_height = 18;
+
+var old_data = '';
+var old_format = '';
 
 function clear_char(row, col) {
   ctx.fillStyle = "black";
