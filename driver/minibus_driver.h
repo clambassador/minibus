@@ -30,11 +30,6 @@ class MinibusDriver {
 public:
 	MinibusDriver() : MinibusDriver(new ScreenDisplay(stdscr),
 					new GetchInput()) {
-		initscr();
-		start_color();
-		keypad(stdscr, true);
-		noecho();
-		cbreak();
 	}
 
 	MinibusDriver(IDisplay* display, IInput* input)

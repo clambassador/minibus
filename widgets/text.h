@@ -16,11 +16,11 @@ namespace minibus {
 
 class Text : public Widget {
 public:
-	Text(const string& text) : _text(text) {}
+	Text(const string& text) : _bold(0), _text(text) {}
 	virtual ~Text() {}
 
 	virtual int render(IDisplay* win) {
-		win->write(0, 0, _text);
+		win->write(0, 0, _text, _bold);
 		return 0;
 	}
 
@@ -40,8 +40,12 @@ public:
 		_text = text;
 	}
 
-protected:
+	virtual void bold() {
+		_bold = IDisplay::BOLD;
+	}
 
+protected:
+	int _bold;
 	string _text;
 };
 

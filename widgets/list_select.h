@@ -24,8 +24,8 @@ public:
 		for (size_t i = 0; i < _items.size(); ++i) {
 			win->write(i, 0, _items[i],
 				   (_ycur == i) ?
-					IDisplay::BLACK_RED :
-					IDisplay::RED_BLACK);
+					IDisplay::BLACK_YELLOW :
+					IDisplay::YELLOW_BLACK);
 		}
 		return 0;
 	}

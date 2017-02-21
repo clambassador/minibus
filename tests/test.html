@@ -36,20 +36,25 @@ function render() {
       old_width = width;
       old_height = height;
       old_data = data;
+      old_format = format
       full_render()
     } else {
-      partial_render(data);
+      partial_render(data, format);
       old_data = data;
+      old_format = format;
     }
 }
 
-function partial_render(data) {
+function partial_render(data, format) {
     for (i = 0; i < old_height; ++i) {
       for (j = 0; j < old_width; ++j) {
         pos = (i * old_width) + j;
-        if (old_data.charAt(pos) != data.charAt(pos)) {
-          clear_char(i + 1, j + 1);
-          render_char(i + 1, j + 1, ''+ data.charAt((i * old_width) + j));
+        if (old_data.charAt(pos) != data.charAt(pos)
+            ||
+            old_format.charAt(pos) != format.charAt(pos)) {
+          clear_char(i + 1, j + 1, format.charAt(pos));
+          render_char(i + 1, j + 1, ''+ data.charAt(pos),
+                      format.charAt(pos));
         }
       }
     }
@@ -60,7 +65,9 @@ function full_render() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     for (i = 0; i < old_height; ++i) {
       for (j = 0; j < old_width; ++j) {
-        render_char(i + 1, j + 1, ''+old_data.charAt((i * old_width) + j));
+        render_char(i + 1, j + 1,
+                    ''+old_data.charAt((i * old_width) + j),
+                    old_format.charAt((i * old_width) + j));
       }
     }
 }
@@ -80,15 +87,48 @@ var row_height = 18;
 var old_data = '';
 var old_format = '';
 
-function clear_char(row, col) {
-  ctx.fillStyle = "black";
+function clear_char(row, col, fmt) {
+  fmt = fmt.charCodeAt();
+  if (fmt >= 32) fmt -= 32;
+  console.log("" + row + " " + col + " " + (0 + fmt));
+
+  if (fmt >= 0 && fmt <= 6) ctx.fillStyle = "black";
+  if (fmt == 7) ctx.fillStyle = "white";
+  if (fmt == 8) ctx.fillStyle = "red";
+  if (fmt == 9) ctx.fillStyle = "blue";
+  if (fmt == 10) ctx.fillStyle = "green";
+  if (fmt == 11) ctx.fillStyle = "magenta";
+  if (fmt == 12) ctx.fillStyle = "cyan";
+  if (fmt == 13) ctx.fillStyle = "yellow";
+  if (fmt >= 14 && fmt <= 19) ctx.fillStyle = "white";
+
   ctx.fillRect((col) * col_width, (row - 1) * row_height,
                 col_width, row_height);
 }
 
-function render_char(row, col, val) {
+function render_char(row, col, val, fmt) {
   ctx.font = "16px monospace";
-  ctx.fillStyle = "white";
+  fmt = fmt.charCodeAt();
+  console.log("" + row + " " + col + " " + val + " " + (0 + fmt));
+  if (fmt >= 32) {
+    fmt -= 32;
+    ctx.font = "bold 16px monospace";
+  }
+
+  if (fmt == 0) ctx.fillStyle = "white";
+  if (fmt == 1) ctx.fillStyle = "red";
+  if (fmt == 2) ctx.fillStyle = "blue";
+  if (fmt == 3) ctx.fillStyle = "green";
+  if (fmt == 4) ctx.fillStyle = "magenta";
+  if (fmt == 5) ctx.fillStyle = "cyan";
+  if (fmt == 6) ctx.fillStyle = "yellow";
+  if (fmt >= 7 && fmt <= 13) ctx.fillStyle = "black";
+  if (fmt == 14) ctx.fillStyle = "red";
+  if (fmt == 15) ctx.fillStyle = "blue";
+  if (fmt == 16) ctx.fillStyle = "green";
+  if (fmt == 17) ctx.fillStyle = "magenta";
+  if (fmt == 18) ctx.fillStyle = "cyan";
+  if (fmt == 19) ctx.fillStyle = "yellow";
   ctx.fillText(val, col * col_width, row * row_height - 4);
 }
 

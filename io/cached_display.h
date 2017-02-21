@@ -37,7 +37,7 @@ public:
 	}
 
 	virtual void get_format(string* value) {
-		value->assign(_format.get());
+		value->assign(_format.get(), _screen_size - 1);
 	}
 
 	virtual void clear() {

@@ -26,6 +26,7 @@ public:
 		vs.push_back("new const");
 		_ls = new ListSelect(vs);
 		_tx1 = new Text("Hello THERE!!");
+		_tx1->bold();
 		_tx2 = new Text("loading.");
 		_f_pos = _ls->get_selected_pos();
 		add_state_widget(new CloseOnKey(_tx1));
