@@ -34,6 +34,8 @@ public:
 		return 0;
 	}
 
+	virtual void focus() {}
+
 	virtual int close() {
 		_selected_pos.set_value(_ycur);
 		_selected_value.set_value(_items.at(_ycur));

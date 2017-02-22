@@ -8,6 +8,7 @@
 
 #include "minibus/io/i_display.h"
 #include "minibus/io/key.h"
+#include "minibus/widgets/text.h"
 #include "minibus/widgets/widget.h"
 #include "minibus/widgets/xynav.h"
 
@@ -15,9 +16,9 @@ using namespace std;
 
 namespace minibus {
 
-class MoveableText : public Widget, public XYNav {
+class MoveableText : public Text, public XYNav {
 public:
-	MoveableText(const string& text) : XYNav(30), _text(text) {}
+	MoveableText(const string& text) : XYNav(30), Text(text) {}
 	virtual ~MoveableText() {}
 
 	virtual int render(IDisplay* win) {
@@ -37,13 +38,6 @@ public:
 		return XYNav::keypress(key);
 	}
 
-	virtual void set_text(const string& text) {
-		_text = text;
-	}
-
-protected:
-
-	string _text;
 };
 
 }  // minibus

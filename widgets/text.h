@@ -44,6 +44,10 @@ public:
 		_bold = IDisplay::BOLD;
 	}
 
+	virtual void focus() {
+		bold();
+	}
+
 protected:
 	int _bold;
 	string _text;

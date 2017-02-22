@@ -98,6 +98,30 @@ public:
 		return _ch == 4;
 	}
 
+	bool y_navigation() const {
+		static set<int> navkeys;
+		if (navkeys.empty()) {
+			navkeys.insert(KEY_UP);
+			navkeys.insert(KEY_DOWN);
+			navkeys.insert(KEY_PPAGE);
+			navkeys.insert(KEY_NPAGE);
+		}
+		return (navkeys.count(_ch));
+	}
+
+	bool x_navigation() const {
+		static set<int> navkeys;
+		if (navkeys.empty()) {
+			navkeys.insert(KEY_LEFT);
+			navkeys.insert(KEY_RIGHT);
+			navkeys.insert(KEY_HOME);
+			navkeys.insert(KEY_SHOME);
+			navkeys.insert(KEY_END);
+			navkeys.insert(KEY_SEND);
+		}
+		return (navkeys.count(_ch));
+	}
+
 	bool navigation() const {
 		static set<int> navkeys;
 		if (navkeys.empty()) {

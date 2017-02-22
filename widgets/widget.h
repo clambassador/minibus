@@ -15,6 +15,7 @@ public:
 	virtual int open() = 0;
 	virtual int close() = 0;
 	virtual int keypress(const Key&) = 0;
+	virtual void focus() = 0;
 };
 
 }  // minibus

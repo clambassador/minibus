@@ -23,6 +23,9 @@ public:
 	virtual size_t width() const = 0;
 	virtual size_t height() const = 0;
 
+	virtual void vertical() = 0;
+	virtual void horizontal() = 0;
+
 	enum {
 		WHITE_BLACK = 0,
 		RED_BLACK,

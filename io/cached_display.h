@@ -5,14 +5,14 @@
 #include <cstring>
 #include <string>
 
-#include "minibus/io/i_display.h"
+#include "minibus/io/base_display.h"
 #include "minibus/io/render_finish.h"
 
 using namespace std;
 
 namespace minibus {
 
-class CachedDisplay : public IDisplay {
+class CachedDisplay : public BaseDisplay {
 public:
 	CachedDisplay(size_t y, size_t x)
 			: _maxx(x), _maxy(y) {
@@ -27,9 +27,6 @@ public:
 		for (size_t i = 0; i < text.length(); ++i) {
 			set(y, x + i, text.at(i), attr);
 		}
-	}
-
-	virtual void move(size_t y, size_t x) {
 	}
 
 	virtual void get_data(string* value) {
@@ -67,7 +64,9 @@ protected:
 	}
 
 	virtual size_t pos(size_t y, size_t x) {
-		return (y * _maxx) + x;
+		size_t retval = (y_pos(y) * _maxx) + x_pos(x);
+		assert(retval < _screen_size);
+		return retval;
 	}
 
 	const size_t _maxx;

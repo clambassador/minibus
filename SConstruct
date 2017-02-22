@@ -11,6 +11,8 @@ tests['test_minibus_web.cc'] = 'test_minibus_web'
 tests['test_multikey.cc'] = 'test_multikey'
 tests['test_moveable.cc'] = 'test_moveable'
 tests['test_textentry.cc'] = 'test_textentry'
+tests['test_headermain.cc'] = 'test_headermain'
+tests['test_vertical_list.cc'] = 'test_vertical_list'
 
 libs = Split("""pthread
 	        ncurses

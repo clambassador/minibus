@@ -4,14 +4,14 @@
 #include <mutex>
 #include <ncurses.h>
 
-#include "minibus/io/i_display.h"
+#include "minibus/io/base_display.h"
 #include "minibus/io/render_finish.h"
 
 namespace minibus {
 
-class ScreenDisplay : public IDisplay {
+class ScreenDisplay : public BaseDisplay {
 public:
-	ScreenDisplay(WINDOW* window) : _window(window) {
+	ScreenDisplay(WINDOW* window) : BaseDisplay(), _window(window) {
 		/* N.B.: keep up to date with IDisplay's enum */
                 init_pair(0, COLOR_WHITE, COLOR_BLACK);
                 init_pair(1, COLOR_RED, COLOR_BLACK);
@@ -43,37 +43,28 @@ public:
 	}
 
 	virtual void move(size_t y, size_t x) {
-		wmove(_window, y, x);
+		wmove(_window, y_pos(y), x_pos(x));
 	}
 
 	virtual void clear() {
 		::clear();
 	}
 
-	virtual RenderFinish* start_render() {
-		return new RenderFinish(this);
-	}
-
-	virtual void finish_render() {
-	}
-
 	virtual size_t width() const { return 80; }
 	virtual size_t height() const { return 40; }
 
-
 protected:
 	virtual void write_impl(size_t y, size_t x, const string& text) {
-		mvwprintw(_window, y, x, text.c_str());
+		mvwprintw(_window, y_pos(y), x_pos(x), text.c_str());
+		seen(y_pos(y), x_pos(x) + text.length());
 	}
 
 	virtual void write_impl(size_t y, size_t x, const string& text,
 				int attr) {
 		vector<int> attrs = process_attrs(attr);
-		for (auto &x : attrs) {
-			attron(x);
-		}
+		for (auto &z : attrs) attron(z);
 		write_impl(y, x, text);
-		for (auto &x : attrs) attroff(x);
+		for (auto &z : attrs) attroff(z);
 	}
 
 	virtual vector<int> process_attrs(int attr) {

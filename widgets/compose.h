@@ -37,6 +37,10 @@ public:
 		return _next->keypress(key);
 	}
 
+	virtual void focus() {
+		_next->focus();
+	}
+
 protected:
 	unique_ptr<Widget> _next;
 };
