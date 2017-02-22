@@ -18,7 +18,7 @@ namespace minibus {
 
 class MoveableText : public Text, public XYNav {
 public:
-	MoveableText(const string& text) : XYNav(30), Text(text) {}
+	MoveableText(const string& text) : Text(text), XYNav(30) {}
 	virtual ~MoveableText() {}
 
 	virtual int render(IDisplay* win) {
