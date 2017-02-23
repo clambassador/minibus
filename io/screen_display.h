@@ -46,6 +46,10 @@ public:
 		wmove(_window, y_pos(y), x_pos(x));
 	}
 
+	virtual void finish_render() {
+		wmove(_window, _cursor_y, _cursor_x);
+	}
+
 	virtual void clear() {
 		::clear();
 	}

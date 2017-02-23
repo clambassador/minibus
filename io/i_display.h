@@ -26,6 +26,8 @@ public:
 	virtual void vertical() = 0;
 	virtual void horizontal() = 0;
 
+	virtual void stay() = 0;
+
 	enum {
 		WHITE_BLACK = 0,
 		RED_BLACK,

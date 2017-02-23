@@ -36,8 +36,13 @@ public:
 
 	virtual int render(IDisplay* win) {
 		for (size_t i = 0; i < _items.size(); ++i) {
-			if (i == _ycur) _items[i]->focus();
+			if (i == _ycur) {
+				_items[i]->focus();
+			}
 			_items[i]->render(win);
+			if (i == _ycur) {
+				win->stay();
+			}
 			win->vertical();
 		}
 		return 0;
