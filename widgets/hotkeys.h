@@ -36,6 +36,16 @@ public:
 		_keys[key] = text;
 	}
 
+	virtual int keypress(const Key& key) {
+		stringstream ss;
+
+		if (_keys.count(key)) {
+			_key = key;
+			return -1;
+		}
+		return 0;
+	}
+
 	virtual int render(IDisplay* win) {
 		size_t pos = 0;
 		size_t i = 0;
@@ -50,6 +60,7 @@ public:
 
 protected:
 	map<Key, string> _keys;
+	Key _key;
 };
 
 }  // minibus

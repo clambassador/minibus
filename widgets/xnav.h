@@ -24,9 +24,9 @@ public:
 			_xcur = 0;
 		} else if (key.end()) {
 			_xcur = _xmax;
-		}
+		} else return 0;
 
-		return 0;
+		return 1;
 	}
 
 protected:

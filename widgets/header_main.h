@@ -40,7 +40,9 @@ public:
 	}
 
 	virtual int keypress(const Key& key) {
-		return _main->keypress(key);
+		int retval = _main->keypress(key);
+		if (!retval) retval = _header->keypress(key);
+		return retval;
 	}
 
 	virtual void focus() {

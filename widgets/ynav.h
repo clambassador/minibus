@@ -20,8 +20,9 @@ public:
 			if (_ycur > 0) --_ycur;
 		} else if (key.down()) {
 			if (++_ycur == _ymax) --_ycur;
-		}
-		return 0;
+		} else return 0;
+
+		return 1;
 	}
 
 protected:

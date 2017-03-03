@@ -121,9 +121,9 @@ protected:
 	virtual void keypress(const Key& key) {
 		Widget* widget = get_focus();
 		assert(widget);
-		bool closed = widget->keypress(key);
+		int closed = widget->keypress(key);
 		after_keypress(key, _cur_state);
-		if (closed) {
+		if (closed == -1) {
 			_display->clear();
 			int old_state = _cur_state;
 			update_state(widget->close());

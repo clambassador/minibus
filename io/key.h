@@ -12,6 +12,7 @@ namespace minibus {
 
 class Key {
 public:
+	Key() : _ch(0) {}
 	Key(int ch) : _ch(ch) {}
 	Key(const Key& key) : _ch(key._ch) {}
 	bool operator<(const Key& other) const {
@@ -130,6 +131,14 @@ public:
 
 	int key() const {
 		return _ch;
+	}
+
+	void eat() {
+		_ch = 0;
+	}
+
+	bool eaten() const {
+		return (_ch == 0);
 	}
 
 protected:

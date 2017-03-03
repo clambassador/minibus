@@ -32,7 +32,7 @@ public:
 	}
 
 	virtual int keypress(const Key& key) {
-		return 0;
+		return -1;
 	}
 
 	virtual void focus() {}

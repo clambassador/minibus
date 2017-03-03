@@ -25,13 +25,9 @@ public:
 	}
 
 	virtual int keypress(const Key& key) {
-		if (key.left() || key.right()) {
-			XNav::keypress(key);
-		}
-		if (key.up() || key.down()) {
-			YNav::keypress(key);
-		}
-		return 0;
+		int retval = XNav::keypress(key);
+		if (!retval) retval = YNav::keypress(key);
+		return retval;
 	}
 
 protected:

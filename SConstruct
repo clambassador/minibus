@@ -14,6 +14,7 @@ tests['test_textentry.cc'] = 'test_textentry'
 tests['test_headermain.cc'] = 'test_headermain'
 tests['test_vertical_list.cc'] = 'test_vertical_list'
 tests['test_hotkeys.cc'] = 'test_hotkeys'
+tests['test_hotkey_entry.cc'] = 'test_hotkey_entry'
 
 libs = Split("""pthread
 	        ncurses

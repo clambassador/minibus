@@ -2,6 +2,7 @@
 #define __MINIBUS__WIDGET__TEXT_ENTRY__H__
 
 #include <functional>
+#include <future>
 #include <string>
 #include <vector>
 #include <ncurses.h>
@@ -32,13 +33,13 @@ public:
 
 	virtual int keypress(const Key& key) {
 		if (key.del()) del();
-	  	if (key.backspace()) backspace();
-		if (key.navigation()) XNav::keypress(key);
-		if (key.key() >= 0 && key.key() < 256) {
+		else if (key.backspace()) backspace();
+		else if (key.navigation()) XNav::keypress(key);
+		else if (key.key() >= 0 && key.key() < 256) {
 			insert(key, _xcur);
 		}
-
-		return 0;
+		else return 0;
+		return 1;
 	}
 
 	virtual future<string> get_result() {
