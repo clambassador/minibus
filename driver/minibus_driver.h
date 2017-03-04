@@ -56,57 +56,13 @@ public:
 	}
 
 	virtual void add_state_widget(Widget* widget) {
-		if (_cur_state_build) {
-			assert(_state_to_callback.count(_cur_state_build - 1));
-			_state_to_callback[_cur_state_build - 1]
-			    = bind(next, _cur_state_build - 1, _1);
-		}
 		assert(!_state_to_widget.count(_cur_state_build));
-		assert(!_state_to_callback.count(_cur_state_build));
 		_state_to_widget[_cur_state_build].reset(widget);
-		_state_to_callback[_cur_state_build] = bind(terminate, _1);
-		++_cur_state_build;
-	}
-
-	virtual void loop_state_widget(Widget* widget) {
-		if (_cur_state_build) {
-			assert(_state_to_callback.count(_cur_state_build - 1));
-			_state_to_callback[_cur_state_build - 1]
-			    = bind(next, _cur_state_build - 1, _1);
-		}
-		assert(!_state_to_widget.count(_cur_state_build));
-		assert(!_state_to_callback.count(_cur_state_build));
-		_state_to_widget[_cur_state_build].reset(widget);
-		_state_to_callback[_cur_state_build]
-		    = bind(loop, _cur_state_build, _1);
 		++_cur_state_build;
 	}
 
 	virtual void set_state_widget(int state, Widget* widget) {
 		_state_to_widget[state].reset(widget);
-		_state_to_callback[state] = bind(next, state, _1);
-	}
-
-	virtual void set_state_widget(int state, Widget* widget,
-				      const FNextState& next_state) {
-		_state_to_widget[state].reset(widget);
-		_state_to_callback[state] = next_state;
-	}
-
-	static int next(int state, int parm) {
-		return state + 1;
-	}
-
-	static int loop(int state, int parm) {
-		return state;
-	}
-
-	static int terminate(int parm) {
-		return -1;
-	}
-
-	static int restart(int parm) {
-		return 0;
 	}
 
 protected:
@@ -125,20 +81,21 @@ protected:
 		after_keypress(key, _cur_state);
 		if (closed == -1) {
 			_display->clear();
+
 			int old_state = _cur_state;
-			update_state(widget->close());
+			_cur_state = update_state(_cur_state, widget->close());
+			if (finished()) _stop = true;
+
 			after_close(key, old_state);
 		}
 	}
 
-	virtual void update_state(int param) {
-		_cur_state = _state_to_callback[_cur_state](param);
-		if (finished()) _stop = true;
-		else assert(_state_to_widget.count(_cur_state));
+	virtual int update_state(int cur_state, int param) {
+		return cur_state + 1;
 	}
 
 	virtual bool finished() {
-		return _cur_state == -1;
+		return _state_to_widget.count(_cur_state);
 	}
 
 	virtual Widget* get_focus() {
@@ -166,7 +123,6 @@ protected:
 	int _cur_state;
 	int _cur_state_build;
 	map<int, unique_ptr<Widget>> _state_to_widget;
-	map<int, FNextState> _state_to_callback;
 };
 
 }  // namespace minibus
