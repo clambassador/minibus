@@ -24,10 +24,32 @@ public:
 	}
 
 	static Key javascript(int key) {
+		if (key ==  8) return KEY_BACKSPACE;
+		if (key ==  9) return '\t';
+		if (key == 13) return '\n';
+
 		if (key == 37) return KEY_LEFT;
 		if (key == 38) return KEY_UP;
 		if (key == 39) return KEY_RIGHT;
 		if (key == 40) return KEY_DOWN;
+
+		if (key == 45) return KEY_IC;
+		if (key == 46) return KEY_DC;
+		if (key == 33) return KEY_PPAGE;
+		if (key == 34) return KEY_NPAGE;
+		if (key == 35) return KEY_END;
+		if (key == 36) return KEY_HOME;
+
+		if (key == 16) {
+			// SHIFT
+		}
+		if (key == 17) {
+			// CTRL
+		}
+		if (key == 18) {
+			// ALT
+		}
+
 		return key;
 	}
 
@@ -97,6 +119,10 @@ public:
 
 	bool eot() const {
 		return _ch == 4;
+	}
+
+	bool ins() const {
+		return _ch == KEY_IC;
 	}
 
 	bool y_navigation() const {
