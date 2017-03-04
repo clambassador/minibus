@@ -3,6 +3,7 @@ for i in range(0, 10):
     print ""
 common = Split("""../ib/libib.a
 	       """)
+
 tests = dict()
 tests['test_list_select.cc'] = 'test_list_select'
 tests['test_driver.cc'] = 'test_driver'
@@ -15,6 +16,7 @@ tests['test_headermain.cc'] = 'test_headermain'
 tests['test_vertical_list.cc'] = 'test_vertical_list'
 tests['test_hotkeys.cc'] = 'test_hotkeys'
 tests['test_hotkey_entry.cc'] = 'test_hotkey_entry'
+tests['test_list_select_multi.cc'] = 'test_list_select_multi'
 
 libs = Split("""pthread
 	        ncurses
