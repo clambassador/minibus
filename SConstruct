@@ -17,6 +17,7 @@ tests['test_vertical_list.cc'] = 'test_vertical_list'
 tests['test_hotkeys.cc'] = 'test_hotkeys'
 tests['test_hotkey_entry.cc'] = 'test_hotkey_entry'
 tests['test_list_select_multi.cc'] = 'test_list_select_multi'
+tests['test_list_select_multi_max.cc'] = 'test_list_select_multi_max'
 
 libs = Split("""pthread
 	        ncurses

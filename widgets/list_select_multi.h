@@ -18,7 +18,11 @@ namespace minibus {
 class ListSelectMulti : public YNav, public Base {
 public:
 	ListSelectMulti(const vector<string>& items)
-	    : YNav(items.size()), Base(), _items(items) {}
+	    : ListSelectMulti(items, 0) {}
+
+	ListSelectMulti(const vector<string>& items, size_t max_select)
+	    : YNav(items.size()), Base(),
+	      _items(items), _max_select(max_select) {}
 
 	virtual int render(IDisplay* win) {
 		for (size_t i = 0; i < _items.size(); ++i) {
@@ -53,12 +57,15 @@ protected:
 		if (_selected.count(_ycur)) {
 			_selected.erase(_ycur);
 		} else {
-			_selected.insert(_ycur);
+			if (!_max_select || _selected.size() < _max_select) {
+				_selected.insert(_ycur);
+			}
 		}
 	}
 
 	vector<string> _items;
 	set<size_t> _selected;
+	size_t _max_select;
 };
 
 }  // minibus
