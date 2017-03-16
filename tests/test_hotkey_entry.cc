@@ -25,13 +25,12 @@ int main() {
 	noecho();
 	cbreak();
 
-	Hotkeys *tx1 = new Hotkeys("test", "hi", "more", "keys");
-	VerticalList *vl = new VerticalList(new Text("Good day"),
-					    new TextEntry("> "));
+	Hotkeys *tx1 = new Hotkeys("tx1", "test", "hi", "more", "keys");
+	VerticalList *vl = new VerticalList("vl", new Text("prompt", "Good day"),
+					    new TextEntry("enter", "> "));
 	HeaderMain *hm = new HeaderMain(tx1, vl);
 
 	MinibusDriver md;
-	md.add_state_widget(new CloseOnKey(hm));
-	md.start();
+	md.start(md.build_program("main", new CloseOnKey(hm))->finish());
 	md.wait();
 }

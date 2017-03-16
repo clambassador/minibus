@@ -8,15 +8,15 @@
 
 #include "minibus/io/i_display.h"
 #include "minibus/io/key.h"
-#include "minibus/widgets/widget.h"
+#include "minibus/widgets/base.h"
 
 using namespace std;
 
 namespace minibus {
 
-class Text : public Widget {
+class Text : public Base {
 public:
-	Text(const string& text) : _bold(0), _text(text) {}
+	Text(const string& name, const string& text) : Base(name), _bold(0), _text(text) {}
 	virtual ~Text() {}
 
 	virtual int render(IDisplay* win) {

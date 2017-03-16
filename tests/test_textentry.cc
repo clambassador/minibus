@@ -23,14 +23,13 @@ int main() {
 	noecho();
 	cbreak();
 
-	TextEntry *tx1 = new TextEntry("> ");
-	Text *tx2 = new Text("");
+	TextEntry *tx1 = new TextEntry("tx1", "> ");
+	Text *tx2 = new Text("tx2", "");
 
 	MinibusDriver md;
-	md.add_state_widget(new CloseOnKey(tx1));
-	md.add_state_widget(new CloseOnKey(tx2));
-	md.start();
-	string txt = tx1->get_result().get();
-	tx2->set_text("Thanks for your interesting thoughts: " + txt);
+	md.start(md.build_program("main",
+		new CloseOnKey(tx1))->then(new CloseOnKey(tx2))->finish());
+	tx2->set_text("Thanks for your interesting thoughts: " +
+		      tx1->get_result().get());
 	md.wait();
 }

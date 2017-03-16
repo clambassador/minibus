@@ -8,17 +8,17 @@
 
 #include "minibus/io/i_display.h"
 #include "minibus/io/key.h"
-#include "minibus/widgets/widget.h"
+#include "minibus/widgets/base.h"
 #include "minibus/widgets/ynav.h"
 
 using namespace std;
 
 namespace minibus {
 
-class ListSelect : public YNav, public Widget {
+class ListSelect : public YNav, public Base {
 public:
-	ListSelect(const vector<string>& items)
-	    : YNav(items.size()), _items(items) {}
+	ListSelect(const string& name, const vector<string>& items)
+	    : YNav(items.size()), Base(name), _items(items) {}
 
 	virtual int render(IDisplay* win) {
 		for (size_t i = 0; i < _items.size(); ++i) {
@@ -31,14 +31,15 @@ public:
 	}
 
 	virtual int open() {
+		// TODO: clear promise
 		return 0;
 	}
 
 	virtual void focus() {}
 
 	virtual int close() {
-		_selected_pos.set_value(_ycur);
-		_selected_value.set_value(_items.at(_ycur));
+	//	_selected_pos.set_value(_ycur);
+	//	_selected_value.set_value(_items.at(_ycur));
 		return 0;
 	}
 

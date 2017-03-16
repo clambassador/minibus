@@ -33,7 +33,7 @@ int main() {
 	noecho();
 	cbreak();
 
-	ListSelectMulti lsm(vs);
+	ListSelectMulti lsm("lsm", vs);
 
 	while (true) {
 		lsm.render(new ScreenDisplay(stdscr));

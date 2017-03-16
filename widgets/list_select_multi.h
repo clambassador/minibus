@@ -17,11 +17,12 @@ namespace minibus {
 
 class ListSelectMulti : public YNav, public Base {
 public:
-	ListSelectMulti(const vector<string>& items)
-	    : ListSelectMulti(items, 0) {}
+	ListSelectMulti(const string& name, const vector<string>& items)
+	    : ListSelectMulti(name, items, 0) {}
 
-	ListSelectMulti(const vector<string>& items, size_t max_select)
-	    : YNav(items.size()), Base(),
+	ListSelectMulti(const string& name,
+			const vector<string>& items, size_t max_select)
+	    : YNav(items.size()), Base(name),
 	      _items(items), _max_select(max_select) {}
 
 	virtual int render(IDisplay* win) {

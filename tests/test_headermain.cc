@@ -24,15 +24,14 @@ int main() {
 	noecho();
 	cbreak();
 
-	TextEntry *tx1 = new TextEntry("> ");
-	Text *header = new Text("WELCOME TO TEXT ENTRY !!!");
-	Text *tx2 = new Text("");
+	TextEntry *tx1 = new TextEntry("tx1", "> ");
+	Text *header = new Text("header", "WELCOME TO TEXT ENTRY !!!");
+	Text *tx2 = new Text("tx2", "");
 	HeaderMain *hm = new HeaderMain(header, tx1);
 
 	MinibusDriver md;
-	md.add_state_widget(new CloseOnKey(hm));
-	md.add_state_widget(new CloseOnKey(tx2));
-	md.start();
+	md.start(md.build_program("main", new CloseOnKey(hm))
+		 ->then(new CloseOnKey(tx2))->finish());
 	string txt = tx1->get_result().get();
 	tx2->set_text("Thanks for your interesting thoughts: " + txt);
 	md.wait();

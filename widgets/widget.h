@@ -2,6 +2,7 @@
 #define __MINIBUS__WIDGET__WIDGET__H__
 
 #include <ncurses.h>
+#include <string>
 
 #include "minibus/io/key.h"
 #include "minibus/io/i_display.h"
@@ -16,6 +17,7 @@ public:
 	virtual int close() = 0;
 	virtual int keypress(const Key&) = 0;
 	virtual void focus() = 0;
+	virtual string name() const = 0;
 };
 
 }  // minibus

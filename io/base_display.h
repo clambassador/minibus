@@ -11,7 +11,9 @@ namespace minibus {
 
 class BaseDisplay : public IDisplay {
 public:
-	BaseDisplay() {}
+	BaseDisplay() {
+		reset_box();
+	}
 	virtual ~BaseDisplay() {}
 
 	virtual void clear() {

@@ -23,12 +23,14 @@ int main() {
 	noecho();
 	cbreak();
 
-	MoveableText *tx1 = new MoveableText("hit a b c or d!");
-	Text *tx2 = new Text("thanks alot!");
+	MoveableText *tx1 = new MoveableText("tx1", "hit a b c or d!");
+	Text *tx2 = new Text("tx2", "thanks alot!");
 
 	MinibusDriver md;
-	md.add_state_widget(new CloseOnKey(tx1, 'a', 'b', 'c', 'd'));
-	md.add_state_widget(new CloseOnKey(tx2));
-	md.start();
+	md.start(md.build_program(
+			"main",
+		        new CloseOnKey(tx1, 'a', 'b', 'c', 'd'))
+		->then(new CloseOnKey(tx2))
+		->finish());
 	md.wait();
 }

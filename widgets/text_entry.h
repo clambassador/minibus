@@ -17,8 +17,8 @@ namespace minibus {
 
 class TextEntry : public XNav, public Text {
 public:
-	TextEntry(const string& prompt)
-			: XNav(), Text(""), _prompt(prompt) {}
+	TextEntry(const string& name, const string& prompt)
+			: XNav(), Text(name, ""), _prompt(prompt) {}
 
 	virtual int render(IDisplay* win) {
 		win->write(0, 0, _prompt + _text.c_str());

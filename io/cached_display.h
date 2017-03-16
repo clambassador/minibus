@@ -43,10 +43,6 @@ public:
 		memset(_format.get(), 0, _maxx * _maxy + 1);
 	}
 
-	virtual RenderFinish* start_render() {
-		return new RenderFinish(this);
-	}
-
 	virtual void finish_render() {
 		string s;
 		get_data(&s);

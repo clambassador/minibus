@@ -18,20 +18,28 @@ using namespace minibus;
 
 vector<string> vs;
 
+bool decide(ListSelect* ls) {
+	if (!ls) return true;
+	return ls->get_selected();
+}
+
 class MinibusDriverTest : public MinibusDriver {
 public:
 	MinibusDriverTest(IDisplay* display,
 			  IInput* input)
 			: MinibusDriver(display, input) {
 		vs.push_back("new const");
-		_ls = new ListSelect(vs);
-		_tx1 = new Text("Hello THERE!!");
+		_ls = new ListSelect("ls", vs);
+		_tx1 = new Text("tx1", "Hello THERE!!");
 		_tx1->bold();
-		_tx2 = new Text("loading.");
+		_tx2 = new Text("tx2", "loading.");
 		_f_pos = _ls->get_selected_pos();
-		add_state_widget(new CloseOnKey(_tx1));
-		add_state_widget(new CloseOnKey(_ls));
-		add_state_widget(new CloseOnKey(_tx2));
+		_cur = build_program("main", new CloseOnKey(_tx1))
+		    ->then(new CloseOnKey(_ls))
+		    ->when(new CloseOnKey(_tx1), new CloseOnKey(_tx2),
+			   bind(&decide, _ls))
+		    ->loop(nullptr, bind(&decide, nullptr))
+		    ->loop(nullptr, bind(&decide, nullptr))->finish();
 	}
 
 	virtual ~MinibusDriverTest() {
@@ -39,12 +47,12 @@ public:
 	}
 
 protected:
-	virtual void after_keypress(const Key& key, int state) {
-		if (pos_ready()) {
-			int pos = _f_pos.get();
+	virtual void after_keypress(const Key& key, Widget* widget) {
+		if (state(widget, _tx2)) {
 			_tx2->set_text(
 			    Logger::stringify("You chose: % (item %)",
-				      vs[pos], pos));
+				      vs[_ls->get_selected()],
+				      _ls->get_selected()));
 		}
 	}
 

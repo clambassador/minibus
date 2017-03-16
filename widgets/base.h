@@ -16,7 +16,8 @@ namespace minibus {
 
 class Base : public Widget {
 public:
-	Base() {}
+	Base() : _name("") {}
+	Base(const string& name) : _name(name) {}
 	virtual ~Base() {}
 
 	virtual int render(IDisplay* win) {
@@ -36,7 +37,12 @@ public:
 	}
 
 	virtual void focus() {}
+
+	virtual string name() const {
+		return _name;
+	}
 protected:
+	string _name;
 };
 
 }  // minibus

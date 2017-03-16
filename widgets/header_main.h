@@ -7,16 +7,19 @@
 
 #include "minibus/io/i_display.h"
 #include "minibus/io/key.h"
-#include "minibus/widgets/widget.h"
+#include "minibus/widgets/base.h"
 
 using namespace std;
 
 namespace minibus {
 
-class HeaderMain : public Widget {
+class HeaderMain : public Base {
 public:
 	HeaderMain(Widget* header, Widget* main)
-			: _header(header), _main(main) {
+	    : HeaderMain("", header, main) {}
+
+	HeaderMain(const string& name, Widget* header, Widget* main)
+	    : Base(name), _header(header), _main(main) {
 		assert(_header.get());
 		assert(_main.get());
 	}

@@ -17,12 +17,19 @@ using namespace minibus;
 
 vector<string> vs;
 Text* tx2;
-int result(size_t t) {
+bool decide(ListSelect* ls) {
+	static int i = 0;
+	static int pos = 0;
+	if (ls) pos = ls->get_selected();
+	++i;
 	stringstream ss;
-	ss << "You chose: " << vs[t] << " (item " << t
-	   << ")" << endl;
+	ss << "you chose " + vs[pos] << " " << i << " times!";
 	tx2->set_text(ss.str());
-	return 0;
+	if (i == 10) {
+		tx2->set_text("okay i'll stop.");
+	} else if (i == 11) return false;
+	if (!ls) return true;
+	return pos;
 }
 
 int main() {
@@ -37,17 +44,16 @@ int main() {
 	noecho();
 	cbreak();
 
-	ListSelect *ls = new ListSelect(vs);
-	Text *tx1 = new Text("Hello THERE!!");
-	tx2 = new Text("loading.");
+	ListSelect *ls = new ListSelect("ls", vs);
+	Text *tx1 = new Text("tx1", "Hello THERE!!");
+	tx2 = new Text("tx2", "loading.");
 
 	MinibusDriver md;
-	md.add_state_widget(new CloseOnKey(tx1));
-	md.add_state_widget(new CloseOnKey(ls));
-	md.add_state_widget(new CloseOnKey(tx2));
-
-	md.start();
-	future<int> fpos = ls->get_selected_pos();
-	fpos.wait();
-	result(fpos.get());
+	md.start(md.build_program("main", new CloseOnKey(tx1))
+		 ->then(new CloseOnKey(ls))
+		 ->when(new CloseOnKey(tx1), new CloseOnKey(tx2), bind(&decide, ls))
+		 ->done()
+		 ->loop(nullptr, bind(&decide, nullptr))
+		 ->finish());
+	md.wait();
 }

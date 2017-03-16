@@ -9,6 +9,7 @@
 #include <thread>
 #include <unistd.h>
 
+#include "minibus/driver/program_builder.h"
 #include "minibus/io/getch_input.h"
 #include "minibus/io/i_display.h"
 #include "minibus/io/i_input.h"
@@ -33,7 +34,8 @@ public:
 	}
 
 	MinibusDriver(IDisplay* display, IInput* input)
-		: _display(display), _input(input), _cur_state(0), _cur_state_build(0) {}
+		: _display(display), _input(input), _cur_state(0),
+		  _cur_state_build(0), _cur(nullptr) {}
 
 	virtual ~MinibusDriver() {
 		stop();
@@ -43,6 +45,14 @@ public:
 	}
 
 	virtual void start() {
+		assert(_cur || _programs.count("main"));
+		if (!_cur) _cur = _programs["main"].get();
+		start(_cur);
+	}
+
+	virtual void start(Widget* first) {
+		_cur = first;
+		open();
 		_stop = false;
 		_thread.reset(new thread(&MinibusDriver::run, this));
 	}
@@ -55,7 +65,7 @@ public:
 		_stop = true;
 	}
 
-	virtual void add_state_widget(Widget* widget) {
+/*	virtual void add_state_widget(Widget* widget) {
 		assert(!_state_to_widget.count(_cur_state_build));
 		_state_to_widget[_cur_state_build].reset(widget);
 		++_cur_state_build;
@@ -64,8 +74,24 @@ public:
 	virtual void set_state_widget(int state, Widget* widget) {
 		_state_to_widget[state].reset(widget);
 	}
+*/
+	virtual ProgramBuilder* build_program(const string& name, Widget* start) {
+		_programs[name].reset(start);
+		return new ProgramBuilder(bind(&MinibusDriver::add_logic, this, _1, _2, _3, _4), start);
+	}
 
 protected:
+	virtual bool state(Widget* main, Widget* sub) {
+		return main->name() == sub->name();
+	}
+
+	virtual void add_logic(Widget* source, Widget* next,
+			       Widget* jump, function<bool()> which) {
+		_state_logic[source][true] = next;
+		_state_logic[source][false] = jump;
+		_state_choice[source] = which;
+	}
+
 	virtual void render() {
 		unique_ptr<RenderFinish> rd(_display->start_render());
 		clear();
@@ -78,28 +104,48 @@ protected:
 		Widget* widget = get_focus();
 		assert(widget);
 		int closed = widget->keypress(key);
-		after_keypress(key, _cur_state);
+		after_keypress(key, _cur);
 		if (closed == -1) {
 			_display->clear();
 
-			int old_state = _cur_state;
-			_cur_state = update_state(_cur_state, widget->close());
+			Widget* old = _cur;
+			auto_update_state(widget->close());
 			if (finished()) _stop = true;
 
-			after_close(key, old_state);
+			after_close(key, old);
+			widget_switch(old, _cur);
+			open();
+			after_open(_cur);
 		}
 	}
 
+	virtual void open() {
+		if (_cur) {
+			_cur->open();
+			after_open(_cur);
+		}
+	}
+
+	virtual void auto_update_state(int param) {
+		if (!_cur) return;
+		if (_state_logic.count(_cur)) {
+			_cur = _state_logic[_cur][_state_choice[_cur]()];
+		} else {
+			update_state(param);
+		}
+	}
+
+	virtual void update_state(int param) { _cur = nullptr; }
 	virtual int update_state(int cur_state, int param) {
 		return cur_state + 1;
 	}
 
 	virtual bool finished() {
-		return _state_to_widget.count(_cur_state);
+		return !_cur;
 	}
 
 	virtual Widget* get_focus() {
-		return _state_to_widget[_cur_state].get();
+		return _cur;
 	}
 
 	virtual void run() {
@@ -113,8 +159,10 @@ protected:
 		}
 	}
 
-	virtual void after_keypress(const Key&, int) {}
-	virtual void after_close(const Key&, int) {}
+	virtual void after_keypress(const Key&, Widget*) {}
+	virtual void after_close(const Key&, Widget*) {}
+	virtual void widget_switch(Widget*, Widget*) {}
+	virtual void after_open(Widget*) {}
 
 	IDisplay* _display;
 	IInput* _input;
@@ -122,7 +170,10 @@ protected:
 	unique_ptr<thread> _thread;
 	int _cur_state;
 	int _cur_state_build;
-	map<int, unique_ptr<Widget>> _state_to_widget;
+	map<string, unique_ptr<Widget>> _programs;
+	map<Widget*, map<bool, Widget*>> _state_logic;
+	map<Widget*, function<bool()>> _state_choice;
+	Widget* _cur;
 };
 
 }  // namespace minibus

@@ -25,21 +25,20 @@ int main() {
 	noecho();
 	cbreak();
 
-	Text *header = new Text("WELCOME TO TEXT ENTRY !!!");
-	Text *tx2 = new Text("");
-	VerticalList *vl = new VerticalList();
-	TextEntry* name = new TextEntry("NAME: ");
+	Text *header = new Text("header", "WELCOME TO TEXT ENTRY !!!");
+	Text *tx2 = new Text("tx2", "");
+	VerticalList *vl = new VerticalList("vl");
+	TextEntry* name = new TextEntry("name", "NAME: ");
 	vl->add_items(name,
-		      new TextEntry("AGE : "),
-		      new TextEntry("JOB : "),
-		      new TextEntry("MOOD: "));
+		      new TextEntry("age", "AGE : "),
+		      new TextEntry("job", "JOB : "),
+		      new TextEntry("mood", "MOOD: "));
 
 	HeaderMain *hm = new HeaderMain(header, vl);
 
 	MinibusDriver md;
-	md.add_state_widget(new CloseOnKey(hm));
-	md.add_state_widget(new CloseOnKey(tx2));
-	md.start();
+	md.start(md.build_program("main", new CloseOnKey(hm))
+		->then(new CloseOnKey(tx2))->finish());
 	tx2->set_text("Thanks " + name->get_result().get());
 	md.wait();
 }

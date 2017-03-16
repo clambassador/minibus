@@ -41,6 +41,10 @@ public:
 		_next->focus();
 	}
 
+	virtual string name() const {
+		return _next->name();
+	}
+
 protected:
 	unique_ptr<Widget> _next;
 };

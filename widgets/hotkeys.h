@@ -18,7 +18,7 @@ namespace minibus {
 class Hotkeys : public Base {
 public:
 	template <typename... ARGS>
-	Hotkeys(ARGS... args) : Base() {
+	Hotkeys(const string& name, ARGS... args) : Base(name) {
 		add_keys(args...);
 	}
 

@@ -8,18 +8,18 @@
 
 #include "minibus/io/i_display.h"
 #include "minibus/io/key.h"
-#include "minibus/widgets/widget.h"
+#include "minibus/widgets/base.h"
 #include "minibus/widgets/ynav.h"
 
 using namespace std;
 
 namespace minibus {
 
-class VerticalList : public YNav, public Widget {
+class VerticalList : public YNav, public Base {
 public:
 	template <typename... ARGS>
-	VerticalList(ARGS... args)
-			: YNav(0) {
+	VerticalList(const string& name, ARGS... args)
+			: YNav(0), Base(name) {
 		add_items(args...);
 	}
 

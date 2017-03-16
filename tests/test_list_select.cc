@@ -5,9 +5,11 @@
 #include <string>
 #include <vector>
 
+#include "minibus/driver/minibus_driver.h"
 #include "minibus/io/cached_display.h"
 #include "minibus/io/key.h"
 #include "minibus/io/screen_display.h"
+#include "minibus/widgets/close_on_key.h"
 #include "minibus/widgets/list_select.h"
 
 using namespace std;
@@ -21,7 +23,6 @@ int result(size_t t) {
 }
 
 int main() {
-
 	vs.push_back("hello");
 	vs.push_back("there");
 	vs.push_back("good");
@@ -33,22 +34,8 @@ int main() {
 	noecho();
 	cbreak();
 
-	ListSelect ls(vs);
-	future<int> fpos = ls.get_selected_pos();
-	future<string> fval = ls.get_selected_value();
-
-	while (true) {
-		ls.render(new ScreenDisplay(stdscr));
-		Key key(getch());
-		if (key.enter()) {
-			ls.close();
-			break;
-		} else {
-			ls.keypress(key);
-		}
-	}
-	fpos.wait();
-	fval.wait();
-	cout << "selected: " << fpos.get() << " " << fval.get() << endl;
-	endwin();
+	ListSelect *ls = new ListSelect("ls", vs);
+	MinibusDriver md;
+	md.start(md.build_program("main", new CloseOnKey(ls))->finish());
+	md.wait();
 }

@@ -23,7 +23,6 @@ int main() {
 
 	Hotkeys *tx1 = new Hotkeys("test", "hi", "more", "keys");
 	MinibusDriver md;
-	md.add_state_widget(new CloseOnKey(tx1));
-	md.start();
+	md.start(new CloseOnKey(tx1));
 	md.wait();
 }

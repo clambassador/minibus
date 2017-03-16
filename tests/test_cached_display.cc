@@ -40,16 +40,14 @@ int main() {
 	noecho();
 	cbreak();
 
-	ListSelect *ls = new ListSelect(vs);
-	Text *tx1 = new Text("Hello THERE!!");
-	tx2 = new Text("loading.");
+	ListSelect *ls = new ListSelect("ls", vs);
+	Text *tx1 = new Text("tx1", "Hello THERE!!");
+	tx2 = new Text("tx2", "loading.");
 
 	MinibusDriver md(new CachedDisplay(25, 80), new GetchInput());
-	md.add_state_widget(new CloseOnKey(tx1));
-	md.add_state_widget(new CloseOnKey(ls));
-	md.add_state_widget(new CloseOnKey(tx2));
+	md.start(md.build_program("main", new CloseOnKey(tx1))->then(new CloseOnKey(ls))
+	    ->then(new CloseOnKey(tx2))->finish());
 
-	md.start();
 	future<int> fpos = ls->get_selected_pos();
 	fpos.wait();
 	result(fpos.get());
