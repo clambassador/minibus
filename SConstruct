@@ -18,6 +18,7 @@ tests['test_hotkeys.cc'] = 'test_hotkeys'
 tests['test_hotkey_entry.cc'] = 'test_hotkey_entry'
 tests['test_list_select_multi.cc'] = 'test_list_select_multi'
 tests['test_list_select_multi_max.cc'] = 'test_list_select_multi_max'
+tests['test_hotkeys_select.cc'] = 'test_hotkeys_select'
 
 libs = Split("""pthread
 	        ncurses
