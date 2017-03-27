@@ -15,6 +15,8 @@
 #include "minibus/io/i_input.h"
 #include "minibus/io/screen_display.h"
 #include "minibus/io/key.h"
+#include "minibus/widgets/close_on_key.h"
+#include "minibus/widgets/list_select.h"
 #include "minibus/widgets/widget.h"
 
 using namespace std;
@@ -65,19 +67,22 @@ public:
 		_stop = true;
 	}
 
-/*	virtual void add_state_widget(Widget* widget) {
-		assert(!_state_to_widget.count(_cur_state_build));
-		_state_to_widget[_cur_state_build].reset(widget);
-		++_cur_state_build;
-	}
-
-	virtual void set_state_widget(int state, Widget* widget) {
-		_state_to_widget[state].reset(widget);
-	}
-*/
 	virtual ProgramBuilder* build_program(const string& name, Widget* start) {
 		_programs[name].reset(start);
-		return new ProgramBuilder(bind(&MinibusDriver::add_logic, this, _1, _2, _3, _4), start);
+		return new ProgramBuilder(bind(&MinibusDriver::add_logic, this,
+					       _1, _2, _3, _4),
+					  start);
+	}
+
+	virtual void use_menu() {
+		vector<string> items;
+		for (auto &x : _programs) {
+			items.push_back(x.first);
+		}
+		items.push_back("Exit");
+		_menu = new ListSelect("menu", items);
+		_menu_item.reset(new CloseOnKey(_menu));
+		_cur = _menu_item.get();
 	}
 
 protected:
@@ -128,8 +133,15 @@ protected:
 
 	virtual void auto_update_state(int param) {
 		if (!_cur) return;
+		if (_cur == _menu_item.get()) {
+			string program = _menu->get_selected_item();
+			if (program == "Exit") _cur = nullptr;
+			else _cur = _programs[program].get();
+			return;
+		}
 		if (_state_logic.count(_cur)) {
 			_cur = _state_logic[_cur][_state_choice[_cur]()];
+			if (!_cur) _cur = _menu_item.get();
 		} else {
 			update_state(param);
 		}
@@ -173,7 +185,9 @@ protected:
 	map<string, unique_ptr<Widget>> _programs;
 	map<Widget*, map<bool, Widget*>> _state_logic;
 	map<Widget*, function<bool()>> _state_choice;
+	unique_ptr<Widget> _menu_item;
 	Widget* _cur;
+	ListSelect* _menu;
 };
 
 }  // namespace minibus

@@ -32,6 +32,7 @@ public:
 
 	virtual int open() {
 		// TODO: clear promise
+		_ycur = 0;
 		return 0;
 	}
 
@@ -49,6 +50,10 @@ public:
 
 	virtual int get_selected() const {
 		return _ycur;
+	}
+
+	virtual string get_selected_item() const {
+		return _items[_ycur];
 	}
 
 	virtual future<int> get_selected_pos() {
