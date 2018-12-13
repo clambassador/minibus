@@ -13,6 +13,7 @@ public:
 
 	virtual void resize(size_t max) {
 		_xmax = max;
+		if (_xcur >= _xmax) _xcur = _xmax;
 	}
 
 	virtual int keypress(const Key& key) {

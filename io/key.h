@@ -65,6 +65,10 @@ public:
 		}
 	}
 
+	bool tab() const {
+		return (_ch == '\t');
+	}
+
 	bool enter() const {
 		return (_ch == '\n' || _ch == KEY_ENTER);
 	}
