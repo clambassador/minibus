@@ -42,10 +42,6 @@ public:
 		write_impl(y, x, text, attr);
 	}
 
-	virtual void move(size_t y, size_t x) {
-		wmove(_window, y_pos(y), x_pos(x));
-	}
-
 	virtual void finish_render() {
 		wmove(_window, _cursor_y, _cursor_x);
 	}

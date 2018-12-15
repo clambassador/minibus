@@ -6,6 +6,10 @@
 #include <iostream>
 #include <set>
 
+#ifndef CTRL
+#define CTRL(c) ((c) & 037)
+#endif
+
 using namespace std;
 
 namespace minibus {
